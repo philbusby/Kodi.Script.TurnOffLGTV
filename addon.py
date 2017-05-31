@@ -391,9 +391,8 @@ if __name__ == '__main__':
     if 'show_help' in sys.argv:
         raise NotImplementedError()
     else:
-        screensaver_gui = Screensaver("screensaver-display.xml",__path__,"default")
-        screensaver_gui.doModal()
-        del screensaver_gui
+        networkShutdownScreensaver = LGTVNetworkShutdownScreensaver()
+        del networkShutdownScreensaver
         del Addon
         del Dialog
         xbmc_log.log('Screensaver deleted')

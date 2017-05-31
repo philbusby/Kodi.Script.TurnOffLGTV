@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="screensaver.kodi.turnofflgtv" name="Turn Off LG TV Screensaver" version="1.1.5" provider-name="FilimoniC">
+<addon id="kodi.script.turnofflgtv" name="Turn Off LG TV Screensaver" version="1.1.5" provider-name="FilimoniC">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
-  <extension point="xbmc.ui.screensaver" library="addon.py" />
+  <extension point="xbmc.python.script" library="addon.py" />
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-	<language></language>
+	<language>English</language>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<forum>http://forum.kodi.tv/showthread.php?tid=245169</forum>
 	<website>http://filimonic.net/</website>
 	<email>alexey@filimonic.net</email>
-	<source>https://github.com/filimonic/Kodi.Screensaver.TurnOffLGTV</source>
+	<source>https://github.com/BillyNate/Kodi.Script.TurnOffLGTV</source>
     <summary>Turns off your LG TV</summary>
-    <description>"Screensaver" that will turn off your LG TV using LAN</description>
+    <description>"Script" that will turn off your LG TV using LAN</description>
   </extension>
 </addon>
