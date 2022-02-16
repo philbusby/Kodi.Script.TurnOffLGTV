@@ -13,7 +13,8 @@ import xbmcaddon
 import xbmc
 import time
 import json
-import urllib2
+import urllib.error
+import urllib.request
 import threading
 import os
 
@@ -159,7 +160,7 @@ class LGTVNetworkShutdown2012:
         try:
             connection_url = 'http://' + ip_address + ':8080'
             xbmc_log.log("Checking connection to " + connection_url )
-            response=urllib2.urlopen(connection_url,timeout=3)
+            response=urllib.request.urlopen(connection_url,timeout=3)
             xbmc_log.log("Got response, code = " + str(response.getcode()))
             if (response.getcode() == 404):
                 xbmc_log.log("Check passed, 404 expected {1}")
@@ -168,7 +169,7 @@ class LGTVNetworkShutdown2012:
                 xbmc_log.log("Check failed, response not as expected")
                 Dialog.notification("LG TV 2012-2014","Seems this is is not TV")
                 return False
-        except urllib2.HTTPError as err:
+        except urllib.error.HTTPError as err:
             if err.code == 404:
                 xbmc_log.log("Check passed, 404 expected {2}")
                 return True
@@ -176,7 +177,7 @@ class LGTVNetworkShutdown2012:
                 xbmc_log.log("Check failed, response is not as expected" + str(err.code))
                 Dialog.notification("LG TV 2012-2014","Seems this is is not TV")
                 return False
-        except urllib2.URLError as err:
+        except urllib.error.URLError as err:
             Dialog.notification("LG TV 2012-2014","Connection failed. Maybe IP or type is incorrect?")
             xbmc_log.log("Check failed, URLError")
         return False
@@ -184,18 +185,18 @@ class LGTVNetworkShutdown2012:
     def check_registration(self,ip_address):
         data = "<?xml version=\"1.0\" encoding=\"utf-8\"?><auth><type>AuthReq</type><value>" + self.client_key + "</value></auth>"
         try:
-            request = urllib2.Request('http://'+ip_address+':8080/roap/api/auth',data=data,headers=self.HTTP_HEADERS)
-            response = urllib2.urlopen(request, timeout=self.HTTP_TIMEOUT)
+            request = urllib.Request('http://'+ip_address+':8080/roap/api/auth',data=data,headers=self.HTTP_HEADERS)
+            response = urllib.request.urlopen(request, timeout=self.HTTP_TIMEOUT)
             print(response.read())
             return True
-        except urllib2.HTTPError as err:
+        except urllib.error.HTTPError as err:
             if err.code == 401:
                 xbmc_log.log("Wrong key supplied: " + self.client_key)
                 Dialog.notification("LG TV 2012-2014","Go to settings to set up key")
                 return False
             else:
                 xbmc_log.log("Unexpected response code " + str(err.code))
-        except urllib2.URLError:
+        except urllib.error.URLError:
             xbmc_log.log("Error checking registration: unable to connect or make a request {URLError)")
             return False
 
@@ -220,16 +221,16 @@ class LGTVNetworkShutdown2012:
     def send_command(self,ip_address,command):
         data = "<?xml version=\"1.0\" encoding=\"utf-8\"?><command><name>HandleKeyInput</name><value>" + command + "</value></command>"
         try:
-            request = urllib2.Request('http://'+ip_address+':8080/roap/api/command',data=data,headers=self.HTTP_HEADERS)
-            response = urllib2.urlopen(request, timeout=self.HTTP_TIMEOUT)
+            request = urllib.Request('http://'+ip_address+':8080/roap/api/command',data=data,headers=self.HTTP_HEADERS)
+            response = urllib.request.urlopen(request, timeout=self.HTTP_TIMEOUT)
             Dialog.notification("LG TV 2012-2014","Command sent")
             xbmc_log.log("Command sent")
             time.sleep(1);
             return True
-        except urllib2.HTTPError as err:
+        except urllib.error.HTTPError as err:
             xbmc_log.log("Error sending PWR_OFF: unable to connect or make a request {HTTPErrror): " + str(err.code))
             return False
-        except urllib2.URLError:
+        except urllib.error.URLError:
             xbmc_log.log("Error sending PWR_OFF: unable to connect or make a request {URLError)")
             return False
 
@@ -318,7 +319,7 @@ class LGTVNetworkShutdown2015(WebSocketClient):
     def received_message(self, message):
         xbmc_log.log("Message received : (" + str(message) + ")", xbmc.LOGDEBUG)
         if message.is_text:
-            response = json.loads(message.data.decode("utf-8"),"utf-8" )
+            response = json.loads(message.data.decode("utf-8"))
             if 'client-key' in response['payload']:
                 self.save_pairing_key(response['payload']['client-key'])
             if response['type'] == 'registered':
@@ -376,10 +377,10 @@ class LGTVNetworkShutdown2015(WebSocketClient):
         try:
             connection_url = 'http://' + ip_address + ':3000'
             xbmc_log.log("Checking connection to " + connection_url )
-            response=urllib2.urlopen(connection_url,timeout=3)
+            response=urllib.request.urlopen(connection_url,timeout=3)
             xbmc_log.log("Check passed")
             return True
-        except urllib2.URLError as err:
+        except urllib.error.URLError as err:
             xbmc_log.log("Check failed")
         return False
 
